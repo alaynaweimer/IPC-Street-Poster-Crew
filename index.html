@@ -399,6 +399,36 @@
             display: none;
         }
 
+        .map-container {
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .map-title {
+            background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-light) 100%);
+            color: white;
+            padding: 12px 18px;
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .map-embed {
+            width: 100%;
+            height: 350px;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         @media (max-width: 600px) {
             header h1 {
                 font-size: 1.6rem;
@@ -469,8 +499,15 @@
                 <!-- Locations will be populated here -->
             </div>
 
+            <div class="map-container">
+                <h3 class="map-title">📍 Your Route Map</h3>
+                <div id="mapEmbed" class="map-embed">
+                    <!-- Map will be inserted here -->
+                </div>
+            </div>
+
             <button class="btn btn-success" id="openMapBtn" onclick="openGoogleMapsRoute()">
-                🚗 Open Route in Google Maps
+                🚗 Open Full Route in Google Maps App
             </button>
 
             <button class="btn btn-secondary" style="width: 100%; margin-top: 12px;" onclick="resetForm()">
@@ -661,6 +698,41 @@
 
             // Store locations for map generation
             window.currentRouteLocations = locations;
+
+            // Embed the map
+            embedMap(locations);
+        }
+
+        function embedMap(locations) {
+            const mapContainer = document.getElementById('mapEmbed');
+            
+            if (!locations || locations.length === 0) {
+                mapContainer.innerHTML = '<p style="color: #728b8f;">No locations to map</p>';
+                return;
+            }
+
+            // Build Google Maps embed URL with directions
+            const addresses = locations.map(loc => loc.address);
+            
+            let embedUrl;
+            
+            if (addresses.length === 1) {
+                // Single location - just show that place
+                embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${encodeURIComponent(addresses[0])}`;
+            } else {
+                // Multiple locations - show directions
+                const origin = encodeURIComponent(addresses[0]);
+                const destination = encodeURIComponent(addresses[addresses.length - 1]);
+                const waypoints = addresses.slice(1, -1).map(a => encodeURIComponent(a)).join('|');
+                
+                if (waypoints) {
+                    embedUrl = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&origin=${origin}&destination=${destination}&waypoints=${waypoints}&mode=driving`;
+                } else {
+                    embedUrl = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&origin=${origin}&destination=${destination}&mode=driving`;
+                }
+            }
+
+            mapContainer.innerHTML = `<iframe src="${embedUrl}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
         }
 
         function openGoogleMapsRoute() {
