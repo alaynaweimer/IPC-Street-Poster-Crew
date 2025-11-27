@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔥 Street Crew Route Planner | Ignite Positive Changes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Ignite Positive Changes Brand Colors */
+            --fire-red: #cf462e;
+            --fire-yellow: #ffcd1d;
+            --fire-orange: #faa22b;
+            --teal-dark: #35575f;
+            --teal-light: #728b8f;
+            --cream: #fffdfc;
+            
+            /* Functional colors */
+            --success: #10b981;
+            --warning: #f59e0b;
+            --bg-light: #f8f9fa;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal-light) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .logo-container {
+            margin-bottom: 15px;
+        }
+
+        .logo-container img {
+            height: 80px;
+            width: auto;
+        }
+
+        /* Flame icon using CSS */
+        .flame-icon {
+            display: inline-block;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--fire-yellow) 0%, var(--fire-orange) 50%, var(--fire-red) 100%);
+            border-radius: 50%;
+            margin-bottom: 10px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(207, 70, 46, 0.4);
+        }
+
+        .flame-icon::after {
+            content: "🔥";
+            font-size: 36px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header .brand-name {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            font-weight: 500;
+            color: var(--fire-yellow);
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .card {
+            background: var(--cream);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--teal-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title span {
+            font-size: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--teal-dark);
+            margin-bottom: 8px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--fire-orange);
+            box-shadow: 0 0 0 3px rgba(250, 162, 43, 0.2);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--fire-orange) 0%, var(--fire-red) 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(207, 70, 46, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--teal-light) 0%, var(--teal-dark) 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(53, 87, 95, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--fire-yellow) 0%, var(--fire-orange) 100%);
+            color: var(--teal-dark);
+            width: 100%;
+            font-size: 1.1rem;
+            padding: 16px 32px;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(250, 162, 43, 0.5);
+        }
+
+        .route-summary {
+            background: linear-gradient(135deg, rgba(255, 205, 29, 0.1) 0%, rgba(250, 162, 43, 0.1) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(250, 162, 43, 0.3);
+        }
+
+        .route-summary h3 {
+            color: var(--teal-dark);
+            margin-bottom: 10px;
+        }
+
+        .route-summary .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--teal-light);
+        }
+
+        .stat-item .number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--fire-red);
+        }
+
+        .location-list {
+            list-style: none;
+        }
+
+        .location-item {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--fire-orange);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .location-item:hover {
+            transform: translateX(5px);
+            border-left-color: var(--fire-red);
+        }
+
+        .location-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .location-number {
+            background: linear-gradient(135deg, var(--fire-orange) 0%, var(--fire-red) 100%);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .location-name {
+            font-weight: 600;
+            color: var(--teal-dark);
+            font-size: 1.1rem;
+        }
+
+        .location-address {
+            color: var(--teal-light);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+        }
+
+        .location-notes {
+            background: linear-gradient(135deg, rgba(255, 205, 29, 0.15) 0%, rgba(250, 162, 43, 0.15) 100%);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: var(--teal-dark);
+            margin-top: 10px;
+            border: 1px solid rgba(250, 162, 43, 0.3);
+        }
+
+        .location-notes::before {
+            content: "📝 ";
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: rgba(255, 205, 29, 0.2);
+            color: #92400e;
+        }
+
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .no-assignments {
+            text-align: center;
+            padding: 40px;
+            color: var(--teal-light);
+        }
+
+        .no-assignments span {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--teal-light);
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #e2e8f0;
+            border-top-color: var(--fire-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 15px;
+            color: #b91c1c;
+            margin-bottom: 20px;
+        }
+
+        .admin-section {
+            background: linear-gradient(135deg, rgba(53, 87, 95, 0.05) 0%, rgba(114, 139, 143, 0.1) 100%);
+            border: 2px dashed var(--teal-light);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .admin-section h4 {
+            color: var(--teal-dark);
+            margin-bottom: 10px;
+        }
+
+        .admin-section p {
+            color: var(--teal-light);
+            font-size: 0.95rem;
+        }
+
+        .admin-section a {
+            color: var(--fire-red);
+            font-weight: 500;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            opacity: 0.9;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--fire-yellow);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .route-summary .stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .flame-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .flame-icon::after {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="flame-icon"></div>
+            <h1>Street Crew Route Planner</h1>
+            <div class="brand-name">IGNITE POSITIVE CHANGES</div>
+            <p>Central Oregon Community Poster Distribution</p>
+        </header>
+
+        <!-- Step 1: Enter Name -->
+        <div class="card" id="nameCard">
+            <h2 class="card-title"><span>👤</span> Who's on poster duty today?</h2>
+            <div class="input-group">
+                <label for="crewName">Select your name:</label>
+                <select id="crewName">
+                    <option value="">-- Select your name --</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="loadMyRoute()">
+                🔥 Get My Route
+            </button>
+        </div>
+
+        <!-- Step 2: Show Route -->
+        <div class="card hidden" id="routeCard">
+            <h2 class="card-title"><span>🗺️</span> Your Poster Route</h2>
+            
+            <div class="route-summary">
+                <h3>Hey <span id="displayName"></span>! Let's do this! 🔥</h3>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="number" id="stopCount">0</span>
+                        <span>stops today</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="number" id="cityCount">0</span>
+                        <span>cities</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="locationsList">
+                <!-- Locations will be populated here -->
+            </div>
+
+            <button class="btn btn-success" id="openMapBtn" onclick="openGoogleMapsRoute()">
+                🚗 Open Route in Google Maps
+            </button>
+
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 12px;" onclick="resetForm()">
+                ← Back to Name Entry
+            </button>
+        </div>
+
+        <!-- No Assignments Message -->
+        <div class="card hidden" id="noAssignmentsCard">
+            <div class="no-assignments">
+                <span>🎉</span>
+                <h3>No stops assigned to you today!</h3>
+                <p>Check with your coordinator or come back later.</p>
+            </div>
+            <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="resetForm()">
+                ← Back to Name Entry
+            </button>
+        </div>
+
+        <!-- Admin Info -->
+        <div class="card">
+            <div class="admin-section">
+                <h4>📋 For Coordinators</h4>
+                <p>Update poster locations and assignments in the <a href="https://docs.google.com/spreadsheets/d/1NfPhlvuJYnwyCOW6qj7nM0MulXJtbwh5fj60AWfgzFs/edit" target="_blank">Google Sheet</a>.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>A community initiative by <a href="#">Ignite Positive Changes</a></p>
+            <p style="margin-top: 5px;">Empowering Central Oregon youth 🔥</p>
+        </footer>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURATION
+        // ========================================
+        
+        // Your Google Sheet ID
+        const SHEET_ID = '1NfPhlvuJYnwyCOW6qj7nM0MulXJtbwh5fj60AWfgzFs';
+        
+        // The name of the sheet/tab containing the data
+        const SHEET_NAME = 'PosterLocations';
+
+        // ========================================
+        // APPLICATION CODE
+        // ========================================
+        
+        let allLocations = [];
+        let assignedPeople = [];
+
+        // Fetch data from Google Sheets
+        async function fetchSheetData() {
+            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
+            
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                
+                // Parse the JSONP response
+                const jsonString = text.substring(47, text.length - 2);
+                const data = JSON.parse(jsonString);
+                
+                if (!data.table || !data.table.rows) {
+                    throw new Error('No data found in sheet');
+                }
+
+                // Parse rows into location objects (skip header row)
+                allLocations = data.table.rows
+                    .filter(row => row.c && row.c[0] && row.c[0].v)
+                    .map(row => ({
+                        locationName: getCellValue(row, 0),
+                        address: getCellValue(row, 1),
+                        assignedTo: getCellValue(row, 2),
+                        notes: getCellValue(row, 3),
+                        city: getCellValue(row, 4),
+                        status: getCellValue(row, 5) || 'Pending'
+                    }));
+
+                // Get unique assigned people for dropdown
+                assignedPeople = [...new Set(
+                    allLocations
+                        .map(loc => loc.assignedTo)
+                        .filter(name => name && name.trim() !== '')
+                )].sort();
+
+                populateNameDropdown();
+                
+            } catch (error) {
+                console.error('Error fetching sheet data:', error);
+                showError('Unable to load data. Please check the Google Sheet settings.');
+            }
+        }
+
+        function getCellValue(row, index) {
+            if (row.c && row.c[index] && row.c[index].v !== null) {
+                return String(row.c[index].v);
+            }
+            return '';
+        }
+
+        function populateNameDropdown() {
+            const select = document.getElementById('crewName');
+            select.innerHTML = '<option value="">-- Select your name --</option>';
+            
+            assignedPeople.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                select.appendChild(option);
+            });
+
+            // Also add option to type custom name
+            const customOption = document.createElement('option');
+            customOption.value = '__custom__';
+            customOption.textContent = '✏️ Type a different name...';
+            select.appendChild(customOption);
+
+            select.addEventListener('change', function() {
+                if (this.value === '__custom__') {
+                    const customName = prompt('Enter your name:');
+                    if (customName && customName.trim()) {
+                        const newOption = document.createElement('option');
+                        newOption.value = customName.trim();
+                        newOption.textContent = customName.trim();
+                        select.insertBefore(newOption, select.lastChild);
+                        select.value = customName.trim();
+                    } else {
+                        select.value = '';
+                    }
+                }
+            });
+        }
+
+        function loadMyRoute() {
+            const name = document.getElementById('crewName').value;
+            
+            if (!name) {
+                alert('Please select or enter your name!');
+                return;
+            }
+
+            // Filter locations for this person (case-insensitive)
+            const myLocations = allLocations.filter(
+                loc => loc.assignedTo.toLowerCase() === name.toLowerCase()
+            );
+
+            if (myLocations.length === 0) {
+                document.getElementById('nameCard').classList.add('hidden');
+                document.getElementById('noAssignmentsCard').classList.remove('hidden');
+                return;
+            }
+
+            displayRoute(name, myLocations);
+        }
+
+        function displayRoute(name, locations) {
+            document.getElementById('nameCard').classList.add('hidden');
+            document.getElementById('noAssignmentsCard').classList.add('hidden');
+            document.getElementById('routeCard').classList.remove('hidden');
+
+            document.getElementById('displayName').textContent = name;
+            document.getElementById('stopCount').textContent = locations.length;
+            
+            // Count unique cities
+            const cities = [...new Set(locations.map(loc => loc.city).filter(c => c))];
+            document.getElementById('cityCount').textContent = cities.length || '—';
+
+            // Build location list HTML
+            const listContainer = document.getElementById('locationsList');
+            listContainer.innerHTML = locations.map((loc, index) => `
+                <div class="location-item">
+                    <div class="location-header">
+                        <div style="display: flex; align-items: flex-start;">
+                            <span class="location-number">${index + 1}</span>
+                            <div>
+                                <div class="location-name">${escapeHtml(loc.locationName)}</div>
+                                <div class="location-address">📍 ${escapeHtml(loc.address)}</div>
+                            </div>
+                        </div>
+                        <span class="status-badge ${loc.status.toLowerCase() === 'completed' ? 'status-completed' : 'status-pending'}">
+                            ${escapeHtml(loc.status)}
+                        </span>
+                    </div>
+                    ${loc.notes ? `<div class="location-notes">${escapeHtml(loc.notes)}</div>` : ''}
+                </div>
+            `).join('');
+
+            // Store locations for map generation
+            window.currentRouteLocations = locations;
+        }
+
+        function openGoogleMapsRoute() {
+            const locations = window.currentRouteLocations;
+            
+            if (!locations || locations.length === 0) {
+                alert('No locations to map!');
+                return;
+            }
+
+            const addresses = locations.map(loc => encodeURIComponent(loc.address));
+            
+            let mapsUrl;
+            
+            if (addresses.length === 1) {
+                mapsUrl = `https://www.google.com/maps/search/?api=1&query=${addresses[0]}`;
+            } else {
+                const origin = addresses[0];
+                const destination = addresses[addresses.length - 1];
+                const waypoints = addresses.slice(1, -1).join('|');
+                
+                if (waypoints) {
+                    mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&waypoints=${waypoints}&travelmode=driving`;
+                } else {
+                    mapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving`;
+                }
+            }
+
+            window.open(mapsUrl, '_blank');
+        }
+
+        function resetForm() {
+            document.getElementById('routeCard').classList.add('hidden');
+            document.getElementById('noAssignmentsCard').classList.add('hidden');
+            document.getElementById('nameCard').classList.remove('hidden');
+            document.getElementById('crewName').value = '';
+        }
+
+        function showError(message) {
+            const nameCard = document.getElementById('nameCard');
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            nameCard.insertBefore(errorDiv, nameCard.firstChild.nextSibling);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSheetData();
+        });
+    </script>
+</body>
+</html>
